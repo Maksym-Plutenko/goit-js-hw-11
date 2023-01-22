@@ -39,9 +39,6 @@ border-radius: 10px;
 
 border: none;
 outline: none;
-
-
-
 }
 
 .search-form button {
@@ -63,6 +60,7 @@ outline: none;
     margin-right: 15px;
     margin-left: 15px;
     margin-top: 75px;
+    margin-bottom: 25px;
 }
 
 .photo-card {
