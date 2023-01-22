@@ -1,12 +1,20 @@
 import axios from "axios";
 import Notiflix from 'notiflix';
-// import debounce from "debounce";
+import debounce from "debounce";
 import throttle from "lodash.throttle";
 
 const input = document.querySelector('#search-form input');
 const button = document.querySelector('button');
 const gallery = document.querySelector('.gallery');
 const listener = document.querySelector('.listener');
+
+
+let exp = 0;
+
+
+
+
+
 
 // console.log(listener);
 
@@ -21,6 +29,7 @@ button.addEventListener('click', event => {
         totalHits = 0;
         gallery.innerHTML = '';
         pixabayAPI(input.value, 1);
+        // observer.observe(listener);
     }
 });
 
@@ -81,25 +90,43 @@ async function pixabayAPI(request, page = 1) {
     }
 }
 
-// endless scroll
+
+// observer
 const obsOptions = {
     root: null,
     rootMargin: '0px',
     threshold: 1.0
 };
-const addPictures = function(entries, observer) {
-    // console.log('It seems its work');
 
-    if ((currentPage > 1) && ((totalHits + 39) > currentPage*40)) {
+const addPictures = function(entries, observer) {
+    // entries.forEach(entry => {
+    //     if (entry.isIntersecting) {
+            
+    //     }
+    // })
+
+    // if (exp < 2) {
+    //     exp += 1;
+    //     return;
+    // }
+
+    if ((totalHits + 39) > currentPage*40) {
         pixabayAPI(input.value, currentPage);
         console.log('API called!');
+    } else {
+        observer.unobserve(listener);
     }
 };
-// const addPicturesDebounced = debounce(addPictures, 3000);
-const addPicturesTrottled = throttle(addPictures, 3000);
 
+const addPicturesTrottled = throttle(addPictures, 3000);
 const observer = new IntersectionObserver(addPicturesTrottled, obsOptions);
+
+
+
+
+
+
 // var target = document.querySelector('#listItem');
 // observer.observe(listener);
-
+// const addPicturesDebounced = debounce(addPictures, 3000);
 
