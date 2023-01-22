@@ -38,19 +38,19 @@ async function pixabayAPI(request) {
                         <img src="${element.webformatURL}" alt="${element.tags}" loading="lazy" />
                         <div class="info">
                             <p class="info-item">
-                                <b>Likes </b>
+                                <b>Likes</b>
                                 ${element.likes}
                             </p>
                             <p class="info-item">
-                                <b>Views </b>
+                                <b>Views</b>
                                 ${element.views}
                             </p>
                             <p class="info-item">
-                                <b>Comments </b>
+                                <b>Comments</b>
                                 ${element.comments}
                             </p>
                             <p class="info-item">
-                                <b>Downloads </b>
+                                <b>Downloads</b>
                                 ${element.downloads}
                             </p>
                         </div>
