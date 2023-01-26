@@ -7,21 +7,13 @@
   padding: 0;
 }
 
-/* * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-} */
-
 /* main variables */
 :root {
-    /* --main-text-color: black; */
-
     --gallery-gap: 10px;
     --column-number: 4;
 }
 
-
+/* page styles */
 .form-container {
     background-color: rgb(78, 75, 253);
     padding-top: 15px;
@@ -37,16 +29,6 @@
 }
 
 .search-form {
-    /* background-color: rgb(78, 75, 253);
-    padding-top: 15px;
-    padding-bottom: 15px;
-
-    position: fixed;
-    top: 0;
-    left: 0;
-
-    width: 100%; */
-
     display: inline-block;
     position: relative;
 
@@ -55,10 +37,6 @@
 }
 
 .search-form input {
-    /* background-color: aqua; */
-    /* margin-left: 50%;
-    transform: translateX(-50%); */
-
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 10px;
@@ -72,11 +50,6 @@
 }
 
 .search-form button {
-    /* margin-right: auto; */
-
-    /* position: absolute;
-    top: 0;
-    left: 0; */
     position: absolute;
     top: 0;
     right: 0;
@@ -87,11 +60,8 @@
     padding-right: 10px;
     
     font-size: 20px;
-
-    /* background-color: #fff; */
     
     border: 1px solid rgb(168, 166, 166);
-    /* border: 1px solid rgb(255, 255, 255); */
     outline: none;
     border-radius: 10px;
 } 
@@ -113,8 +83,6 @@
 
 .photo-card {
     width: calc( (100% + var(--gallery-gap)) / var(--column-number) - var(--gallery-gap));
-    /* min-height: 300px; */
-    /* height: 300px; */
 
     border: 1px solid rgb(148, 145, 145);
     box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.5);
