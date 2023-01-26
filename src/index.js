@@ -1,7 +1,12 @@
+// initiate variables
 import axios from "axios";
 import Notiflix from 'notiflix';
 // import debounce from "debounce";
 // import throttle from "lodash.throttle";
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
+
+console.log(SimpleLightbox);
 
 const input = document.querySelector('#search-form input');
 const button = document.querySelector('button');
@@ -13,6 +18,17 @@ const PICTURES_PER_PAGE = 40;
 let currentPage = 1;
 let totalHits = 0;
 
+// create SimpleLightbox instance
+
+
+var lightbox = new SimpleLightbox('a', {
+    captionType: 'attr',
+    captionsData: 'alt',
+    captionDelay: 250,
+  });
+
+
+// main logick
 button.addEventListener('click', event => {
     event.preventDefault();
 
@@ -53,7 +69,9 @@ async function pixabayAPI(request, page = 1) {
             picturesArr.forEach(element => {
                 galleryMarkup = galleryMarkup + `
                     <div class="photo-card">
-                        <img src="${element.webformatURL}" alt="${element.tags}" loading="lazy" />
+                        <a class="lightbox-link" href="${element.largeImageURL}">
+                            <img src="${element.webformatURL}" alt="${element.tags}" loading="lazy" />
+                        </a>
                         <div class="info">
                             <p class="info-item">
                                 <b>Likes</b>
@@ -83,6 +101,12 @@ async function pixabayAPI(request, page = 1) {
         //     observer.observe(guardian);
         // }
         currentPage += 1;
+        // galleryLightbox.refresh();
+
+        lightbox.refresh();
+
+
+
     } catch(error) {
         Notiflix.Notify.failure(error.message);
         console.log('We are here')
@@ -90,7 +114,7 @@ async function pixabayAPI(request, page = 1) {
 }
 
 
-// observer
+// infinity scroll
 const obsOptions = {
     root: null,
     rootMargin: '300px',
@@ -141,4 +165,3 @@ const observer = new IntersectionObserver(addPictures, obsOptions);
 // var target = document.querySelector('#listItem');
 // observer.observe(listener);
 // const addPicturesDebounced = debounce(addPictures, 3000);
-
