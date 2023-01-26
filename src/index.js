@@ -1,7 +1,7 @@
 import axios from "axios";
 import Notiflix from 'notiflix';
 // import debounce from "debounce";
-import throttle from "lodash.throttle";
+// import throttle from "lodash.throttle";
 
 const input = document.querySelector('#search-form input');
 const button = document.querySelector('button');
@@ -9,17 +9,6 @@ const gallery = document.querySelector('.gallery');
 const guardian = document.querySelector('.guardian');
 
 const PICTURES_PER_PAGE = 40;
-
-
-
-let exp = 0;
-
-
-
-
-
-
-// console.log(listener);
 
 let currentPage = 1;
 let totalHits = 0;
@@ -31,8 +20,10 @@ button.addEventListener('click', event => {
         currentPage = 1;
         totalHits = 0;
         gallery.innerHTML = '';
+        // observer.observe(guardian);
         pixabayAPI(input.value, 1);
         // observer.observe(listener);
+        // observer.observe(guardian);
     }
 });
 
@@ -44,6 +35,7 @@ async function pixabayAPI(request, page = 1) {
         // console.log(response.data.totalHits);
         if (page === 1) {
             totalHits = response.data.totalHits;
+            observer.observe(guardian);
             if (totalHits > 0) {
                 Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
             }
@@ -84,12 +76,12 @@ async function pixabayAPI(request, page = 1) {
                 `;
             });
         }
-        
+        console.log('main func done!')
         // gallery.innerHTML = galleryMarkup;
         gallery.insertAdjacentHTML('beforeend', galleryMarkup);
-        if (currentPage === 1) {
-            observer.observe(guardian);
-        }
+        // if (currentPage === 1) {
+        //     observer.observe(guardian);
+        // }
         currentPage += 1;
     } catch(error) {
         Notiflix.Notify.failure(error.message);
@@ -101,7 +93,7 @@ async function pixabayAPI(request, page = 1) {
 // observer
 const obsOptions = {
     root: null,
-    rootMargin: '0px',
+    rootMargin: '300px',
     threshold: 1.0
 };
 
@@ -117,17 +109,30 @@ const addPictures = function(entries, observer) {
     //     return;
     // }
 
-    if ((totalHits + 39) > currentPage*40) {
-        pixabayAPI(input.value, currentPage);
-        console.log('API called!');
-    } else {
-        observer.unobserve(guardian);
+    console.log(entries);
+    console.log(entries[0].isIntersecting);
+
+    if (entries[0].isIntersecting) {
+        if ((totalHits + PICTURES_PER_PAGE - 1) > currentPage*PICTURES_PER_PAGE) {
+            pixabayAPI(input.value, currentPage);
+            // console.log('API called!');
+        } else {
+            observer.unobserve(guardian);
+        }
     }
+
+
+    // if ((totalHits + PICTURES_PER_PAGE - 1) > currentPage*PICTURES_PER_PAGE) {
+    //     pixabayAPI(input.value, currentPage);
+    //     // console.log('API called!');
+    // } else {
+    //     observer.unobserve(guardian);
+    // }
 };
 
-const addPicturesTrottled = throttle(addPictures, 3000);
-const observer = new IntersectionObserver(addPicturesTrottled, obsOptions);
-
+// const addPicturesTrottled = throttle(addPictures, 500);
+// const observer = new IntersectionObserver(addPicturesTrottled, obsOptions);
+const observer = new IntersectionObserver(addPictures, obsOptions);
 
 
 
