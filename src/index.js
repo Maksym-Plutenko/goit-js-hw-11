@@ -41,30 +41,22 @@ async function findPictures(request, page = 1) {
 
         if (page === 1) {
             totalHits = response.data.totalHits;
+            notifyTotalHits(totalHits);
             observer.observe(guardian);
-            if (totalHits > 0) {
-                Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
-            }
         }
 
         const picturesArr = response.data.hits;
         let galleryMarkup = '';
-
-        if (picturesArr.length === 0) {
-            Notiflix.Notify.warning("Sorry, there are no images matching your search query. Please try again.");
-        } else {
-            picturesArr.forEach(element => {
-                galleryMarkup = galleryMarkup + getElementMarkup(element);
-            });
-        }
-
+        picturesArr.forEach(element => {
+            galleryMarkup = galleryMarkup + getElementMarkup(element);
+        });
         gallery.insertAdjacentHTML('beforeend', galleryMarkup);
+
         currentPage += 1;
         lightbox.refresh();
 
     } catch(error) {
         Notiflix.Notify.failure(error.message);
-        console.log('We are here')
     }
 }
 
@@ -80,8 +72,10 @@ const addPictures = function(entries, observer) {
         if ((totalHits + PICTURES_PER_PAGE - 1) > currentPage*PICTURES_PER_PAGE) {
             findPictures(request, currentPage);
         } else {
-            Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
             observer.unobserve(guardian);
+            if (currentPage > 2) {
+                Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+            }
         }
     }
 };
@@ -92,6 +86,14 @@ const observer = new IntersectionObserver(addPictures, obsOptions);
 async function pixabayAPI(request, page) {
     const KEY = '33025300-4f56a11ea42b0ad7a58370454';
     return await axios.get(`https://pixabay.com/api/?key=${KEY}&q=${request}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${PICTURES_PER_PAGE}&page=${page}`);
+}
+
+function notifyTotalHits(totalHits) {
+    if (totalHits > 0) {
+        Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+    } else {
+        Notiflix.Notify.warning("Sorry, there are no images matching your search query. Please try again.");
+    }
 }
 
 function getElementMarkup(element) {
@@ -121,11 +123,3 @@ function getElementMarkup(element) {
     </div>
     `;
 }
-
-
-
-
-
-
-
-
